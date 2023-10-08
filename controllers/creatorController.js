@@ -54,7 +54,6 @@ const createCreator = async (req, res) => {
             instagramUrl,
             linkedInUrl,
             websiteUrl,
-            tmsCreate,
             refId,
           } = req.body;
            console.log(req.body);
@@ -71,9 +70,10 @@ const createCreator = async (req, res) => {
             instagramUrl,
             linkedInUrl,
             websiteUrl,
-            tmsCreate,
             refId,
             photoUrl, // Add the photo URL here
+            tmsCreate: Date.now(), // Add the current timestamp for tmsCreate
+            tmsUpdate: Date.now(), // Add the current timestamp for tmsUpdate
           };
 
           // Add the new creator document to the 'creators' collection
@@ -220,6 +220,29 @@ const deleteCreator = async (req, res) => {
   }
 };
 
+// Function to get a creator by ID
+const getCreatorById = async (req, res) => {
+  try {
+    const creatorId = req.params.id; // Get the creator ID from the request parameters
+
+    // Query Firestore to get the creator document by ID
+    const creatorDoc = await creatorsCollection.doc(creatorId).get();
+
+    // Check if the creator document exists
+    if (!creatorDoc.exists) {
+      return res.status(404).json({ error: 'Creator not found' });
+    }
+
+    // Extract the creator data from the document
+    const creatorData = creatorDoc.data();
+
+    // Respond with the creator data
+    res.status(200).json({ creator: { id: creatorDoc.id, ...creatorData } });
+  } catch (error) {
+    console.error('Error getting creator by ID:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 
-module.exports = { createCreator ,getAllCreators,updateCreatorss,deleteCreator};
+module.exports = { createCreator ,getAllCreators,updateCreatorss,deleteCreator,getCreatorById};

@@ -11,4 +11,7 @@ admin.initializeApp({
 const db = admin.firestore();
 const storage = admin.storage();
 
-module.exports = { db, storage };
+module.exports = { db, storage,jwtSecret: 'your-secret-key',
+jwtOptions: {
+  expiresIn: '1h', // Set the token expiration time
+}, };
