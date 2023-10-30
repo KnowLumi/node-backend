@@ -25,6 +25,6 @@ router.get('/curriculum/:id',verifyFirebaseToken, getCurriculumById);
 router.put('/curriculum/:id',upload.none(),verifyFirebaseToken, updateCurriculum);
 
 // Route to delete a curriculum by ID
-router.delete('/curriculum/:id',verifyFirebaseToken, deleteCurriculum);
+router.delete('/curriculum/:id',verifyFirebaseToken, deleteCurriculum)
 
 module.exports = router;
