@@ -27,7 +27,7 @@ router.get('/creators/:id',verifyFirebaseToken, getCreatorById);
 router.put('/creators/:id',verifyFirebaseToken, updateCreatorss)
 
 //delete
-router.delete('/creators/:id',verifyFirebaseToken, deleteCreator);
+router.delete('/creators/:id',verifyFirebaseToken,deleteCreator);
 
 
   

@@ -6,8 +6,6 @@ const { verifyFirebaseToken } = require('../middlewares/authMiddleware');
 const router = express.Router();
 
 
-
-
 router.post('/courses',verifyFirebaseToken, createCourse);
 
 //  route to get all courses

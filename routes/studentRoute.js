@@ -19,7 +19,7 @@ router.get('/students/:id',verifyFirebaseToken, getStudentById);
 router.delete('/students/:id',verifyFirebaseToken,deleteStudent);
 
 // update a student by ID
-router.put('/students/:id',verifyFirebaseToken, updateStudent );
+router.put('/students/:id',verifyFirebaseToken,updateStudent );
 
 // Define other student-related routes (update, delete, etc.) as needed.
 
