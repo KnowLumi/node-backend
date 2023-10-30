@@ -1,6 +1,6 @@
 const multer = require('multer');
-const { db } = require('../config');
-const { curriculumSchema } = require('../schema/curriculumSchema'); // Import your curriculum schema
+const { db } = require('../middlewares/authMiddleware');
+const { curriculumSchema } = require('../schema/curriculumSchema'); // Import your curriculum schemaa
 
 // Configure multer for handling file uploads
 const storage = multer.memoryStorage();
@@ -8,43 +8,65 @@ const upload = multer({ storage });
 
 const curriculumCollection = db.collection('curriculum');
 
-// Create a new curriculum for a specific course with JSON data or multipart form data
-const createCurriculumForCourse = async (req, res) => {
+const createCurriculum = async (req, res) => {
   try {
-    upload.any()(req, res, async function (err) {
-      if (err) {
-        console.error('Error uploading files:', err);
-        return res.status(400).json({ error: 'File upload failed' });
+    const { courseId, title, subtitle, sections } = req.body;
+    const parsedSections = JSON.parse(sections);
+
+    // Function to upload a file to Firebase Cloud Storage
+    const uploadFileToFirebase = async (fileBuffer, contentType) => {
+      const bucket = admin.storage().bucket();
+      const file = bucket.file(`lesson_${Date.now()}_${Math.random()}.${contentType}`);
+      const fileStream = file.createWriteStream({ metadata: { contentType } });
+
+      return new Promise((resolve, reject) => {
+        fileStream.on('error', (error) => {
+          reject(error);
+        });
+
+        fileStream.on('finish', () => {
+          resolve(file.publicUrl());
+        });
+
+        fileStream.end(fileBuffer);
+      });
+    };
+
+    // Process file uploads for each lesson
+    parsedSections.forEach((section) => {
+      if (section.lessons) {
+        section.lessons.forEach(async (lesson) => {
+          if (req.files && req.files[lesson.contentType]) {
+            const uploadedFile = req.files[lesson.contentType][0];
+            const fileURL = await uploadFileToFirebase(uploadedFile.buffer, lesson.contentType);
+
+            // Set the file URL in the lesson
+            lesson.file = fileURL;
+          }
+        });
       }
-
-      // Access form fields from req.body
-      const { courseId, title, subtitle, sections } = req.body;
-
-      // Check if required fields are provided
-      if (!courseId || !title || !subtitle || !sections) {
-        return res.status(400).json({ error: 'Required fields are missing.' });
-      }
-
-      // Create a new curriculum document using the schema
-      const newCurriculum = {
-        courseId,
-        title,
-        subtitle,
-        sections: JSON.parse(sections), // Parse sections as JSON
-        tmsCreate: Date.now(), // Add the current timestamp for tmsCreate
-        tmsUpdate: Date.now(), // Add the current timestamp for tmsUpdate
-      };
-
-      // Add the new curriculum document to the 'curriculum' collection
-      const curriculumRef = await curriculumCollection.add(newCurriculum);
-
-      res.status(201).json({ message: 'Curriculum created successfully', id: curriculumRef.id });
     });
+
+    // Create a new curriculum document
+    const newCurriculum = {
+      courseId,
+      title,
+      subtitle,
+      sections: parsedSections,
+      tmsCreate: Date.now(),
+      tmsUpdate: Date.now(),
+    };
+
+    // Add the new curriculum document to the collection
+    const curriculumRef = await curriculumCollection.add(newCurriculum);
+
+    res.status(201).json({ message: 'Curriculum created successfully', id: curriculumRef.id });
   } catch (error) {
     console.error('Error creating curriculum:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 // Function to get a single curriculum by ID
 const getCurriculumById = async (req, res) => {
@@ -132,4 +154,4 @@ const deleteCurriculum = async (req, res) => {
   
 
 
-module.exports = { createCurriculumForCourse,updateCurriculum,deleteCurriculum,getCurriculumById };
+module.exports = { createCurriculum,updateCurriculum,deleteCurriculum,getCurriculumById };

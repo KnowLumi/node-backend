@@ -1,10 +1,12 @@
-// curriculumSchema.js
-const { db } = require('../config');
+const { db } = require('../middlewares/authMiddleware');
 
 const curriculumSchema = {
   id: String,
   tmsCreate: Number,
   tmsUpdate: Number,
+  courseId: String,  // Add a courseId property to relate the curriculum to a specific course
+  title: String,
+  subtitle: String,
   sections: [
     {
       templateId: Number,
@@ -16,7 +18,7 @@ const curriculumSchema = {
           title: String,
           description: String,
           contentType: String, // video, image, pdf
-          url: String,
+          url: String, // URL to the file (optional)
         },
       ],
     },

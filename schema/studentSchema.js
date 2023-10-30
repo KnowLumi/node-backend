@@ -1,7 +1,7 @@
 // studentSchema.js
 
 
-const { db } = require('../config');
+const { db } = require('../middlewares/authMiddleware');
 
 // Define the schema for students
 const studentSchema = {

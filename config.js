@@ -1,17 +1,14 @@
-const admin = require('firebase-admin');
+//const adminn = require('firebase-admin');
 
 // Initialize Firebase Admin SDK
-const serviceAccount = require('./key.json');
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  storageBucket: 'knowlumi-app.appspot.com', // Replace with your Firebase Storage bucket name
+//const serviceAccount = require('./key.json');
+//adminn.initializeApp({
+  //credential: adminn.credential.cert(serviceAccount),
+  //storageBucket: 'knowlumi-app.appspot.com', // Replace with your Firebase Storage bucket name
   // Add other configuration options as needed
-});
+//});
 
-const db = admin.firestore();
-const storage = admin.storage();
+//onst db = adminn.firestore();
+//const storage = adminn.storage();
 
-module.exports = { db, storage,jwtSecret: 'your-secret-key',
-jwtOptions: {
-  expiresIn: '1h', // Set the token expiration time
-}, };
+//module.exports = { db, storage, adminn };

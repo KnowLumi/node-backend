@@ -1,6 +1,6 @@
 // schema/courseSchema.js
 
-const { db } = require('../config');
+const { db } = require('../middlewares/authMiddleware');
 
 const courseSchema = {
   id: String,
