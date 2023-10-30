@@ -20,6 +20,6 @@ router.get('/courses/:id',verifyFirebaseToken, getCourseById);
 router.put('/courses/:id',verifyFirebaseToken, updateCourse);
 
 // Define a route to delete a course by ID
-router.delete('/courses/:id',verifyFirebaseToken, deleteCourse);
+router.delete('/courses/:id',verifyFirebaseToken, deleteCourse)
 
 module.exports = router;
