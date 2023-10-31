@@ -1,7 +1,7 @@
 # node-backend
 
-npm insatll --- to install node_modules(neceassarry)
-npm install firebase-admin - firebase admin sdk package
+npm install --- to install node_modules(neceassarry)
+npm install firebase-admin -- firebase admin sdk package
 
 
 npm install body-parser busboy cors dotenv express express-busboy express-fileupload express-formidable express-rate-limit firebase-admin formidable jsonwebtoken multer nodemon passport passport-jwt progress-stream readable-stream socket.io streamifier uuid websocket ws
