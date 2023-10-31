@@ -1,6 +1,7 @@
 # node-backend
 
 npm install --- to install node_modules(neceassarry)
+
 npm install firebase-admin -- firebase admin sdk package
 
 
